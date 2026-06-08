@@ -42,9 +42,9 @@ class ChapterViewSet(viewsets.ModelViewSet):
                 return Chapter.objects.all()
             if profile.role == "student":
                 enrolled_courses =Enrollment.objects.filter(student=user).values_list("course", flat=True)
-                return Chapter.objects.filter(course_in = enrolled_courses,
+                return Chapter.objects.filter(course__in = enrolled_courses,
                     is_public =True)
-            return Chapter.objects.none()    
+        return Chapter.objects.none()    
 
 
 
