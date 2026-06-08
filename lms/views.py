@@ -31,6 +31,23 @@ class CourseViewSet(viewsets.ModelViewSet):
 class ChapterViewSet(viewsets.ModelViewSet):
     queryset= Chapter.objects.all()
     serializer_class=ChapterSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_authenticated:
+            profile = Profile.objects.get(user=user)
+
+            if profile.role == "instructor":
+                return Chapter.objects.all()
+            if profile.role == "student":
+                enrolled_courses =Enrollment.objects.filter(student=user).values_list("course", flat=True)
+                return Chapter.objects.filter(course_in = enrolled_courses,
+                    is_public =True)
+            return Chapter.objects.none()    
+
+
+
     def perform_create(self, serializer):
         user = self.request.user
         
@@ -39,7 +56,7 @@ class ChapterViewSet(viewsets.ModelViewSet):
         
         profile = Profile.objects.get(user=user)
         if profile.role != "instructor":
-            raise PermissionDenied("Only instrcutors can create chapters.")
+            raise PermissionDenied("Only instructors can create chapters.")
         serializer.save()
 
 
