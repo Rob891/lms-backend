@@ -4,16 +4,14 @@ from rest_framework.exceptions import NotAuthenticated,PermissionDenied
 from .models import Profile, Course, Chapter,Enrollment
 from .serializers import(ProfileSerializer,CourseSerializer,ChapterSerializer,EnrollmentSerializer,RegisterSerializer)
 from django.contrib.auth.models import User
-
 from django.contrib.auth import authenticate, login,logout
-
 from rest_framework.response import Response
 from rest_framework.authentication import SessionAuthentication
 from django.middleware.csrf import get_token
 from rest_framework.views import APIView
 
 from rest_framework.permissions import AllowAny
-from django.contrib.auth import logout
+
 
 # Create your views here.
 
